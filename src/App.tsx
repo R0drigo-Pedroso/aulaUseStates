@@ -11,11 +11,15 @@ function App() {
     { id: 3, titulo: "Fazer exercício", concluida: false },
   ]);
 
-  function concluirTarefa(id: number) {
-    setTarefas((tarefasAntigas) =>
-      tarefasAntigas.map((tarefa) =>
-        tarefa.id === id ? { ...tarefa, concluida: true } : tarefa
-      )
+  function concluirTarefa(id: number, callback: () => void) {
+    setTarefas((tarefasAntigas) => {
+      const novasTarefas =
+        tarefasAntigas.map((tarefa) =>
+          tarefa.id === id ? { ...tarefa, concluida: true } : tarefa
+        );
+      callback()
+      return novasTarefas;
+    }
     );
   }
 
@@ -30,7 +34,9 @@ function App() {
           key={tarefa.id}
           titulo={tarefa.titulo}
           concluida={tarefa.concluida}
-          onConcluir={() => concluirTarefa(tarefa.id)}
+          onConcluir={() => concluirTarefa(tarefa.id, () => {
+            console.log(`Tarefa ${tarefa.id} concluída!`)
+          })}
         />
       ))}
     </>
